@@ -33,6 +33,12 @@ public class PriceEditor extends JavaPlugin implements Listener {
             } else {
                 sender.sendMessage("PriceEditor deactivated!");
             }
+        } else if (label.equalsIgnoreCase("pereload")) {
+            quantities = new HashMap<String, String>();
+            prices = new HashMap<String, String>();
+            try {
+                loadCSV(new File(getDataFolder() + File.separator + "data.csv"));
+            } catch (IOException ex) {}
         }
         return false;
     }
@@ -58,12 +64,15 @@ public class PriceEditor extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         if (active && e.getPlayer().getName().equals("buhiroshi0205")) {
-            if (e.getItem().getType() == Material.BEDROCK && e.getClickedBlock().getType()  == Material.SIGN) {
+            Material itemType = e.getItem().getType();
+            Material blockType = e.getClickedBlock().getType();
+            if (itemType != null && itemType == Material.BEDROCK && blockType != null && blockType == Material.WALL_SIGN) {
                 Sign sign = (Sign) e.getClickedBlock().getState();
                 String itemname = sign.getLine(3);
                 if (sign.getLine(0).equals("Admin Shop") && quantities.containsKey(itemname)) {
                     sign.setLine(1, quantities.get(itemname));
                     sign.setLine(2, prices.get(itemname));
+                    sign.update();
                     e.getPlayer().sendMessage("Price Updated!");
                 } else {
                     e.getPlayer().sendMessage("Sign not an Admin Shop or data does not exist for this item!");
