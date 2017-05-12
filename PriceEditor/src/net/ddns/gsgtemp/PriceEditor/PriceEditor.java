@@ -26,7 +26,10 @@ public class PriceEditor extends JavaPlugin implements Listener {
     
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (sender.hasPermission("PriceEditor") && label.equals("pe")) {
+        if (sender.hasPermission("PriceEditor") && label.equals("pe") && args.length > 0) {
+            if (args.length != 1) {
+                sender.sendMessage("Help: /pe reload; /pe toggle");
+            }
             switch (args[0]) {
                 case "toggle":
                     active = !active;
@@ -43,7 +46,12 @@ public class PriceEditor extends JavaPlugin implements Listener {
                         loadCSV(new File(getDataFolder() + File.separator + "data.csv"));
                     } catch (IOException ex) {
                         sender.sendMessage(ChatColor.RED + "Failed to load data file!");
+                    } finally {
+                        sender.sendMessage("Reload complete!");
                     }
+                    break;
+                default:
+                    sender.sendMessage("Help: /pe reload; /pe toggle");
                     break;
             }
         }
