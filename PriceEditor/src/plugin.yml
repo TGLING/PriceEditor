@@ -2,5 +2,4 @@ name: PriceEditor
 main: net.ddns.gsgtemp.PriceEditor.PriceEditor
 version: 1
 commands:
-    priceedit:
-    pereload:
+    pe:
